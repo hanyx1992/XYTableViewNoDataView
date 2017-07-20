@@ -36,15 +36,15 @@
 
 #pragma mark - TableView 占位图
 
-- (UIImage *)an_noDataViewImage {
+- (UIImage *)xy_noDataViewImage {
     return [UIImage imageNamed:@"note_list_no_data"];
 }
 
-- (NSString *)an_noDataViewMessage {
+- (NSString *)xy_noDataViewMessage {
     return @"都用起来吧, 起飞~";
 }
 
-- (UIColor *)an_noDataViewMessageColor {
+- (UIColor *)xy_noDataViewMessageColor {
     return [UIColor blackColor];
 }
 
