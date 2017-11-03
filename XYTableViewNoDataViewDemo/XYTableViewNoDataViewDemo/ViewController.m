@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "MJRefresh.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -22,6 +23,18 @@
     self.tableView.delegate   = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [UIView new];
+    
+    __weak typeof(self) weakSelf = self;
+    self.tableView.mj_header  = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf loadData];
+    }];
+}
+
+- (void)loadData {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView reloadData];
+    });
 }
 
 #pragma mark - UITableViewDelegate & UITableViewDataSource
