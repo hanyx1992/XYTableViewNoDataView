@@ -13,6 +13,6 @@ extern NSString * const kXYNoDataViewObserveKeyPath;
 @interface XYNoDataView : UIView
 
 /// 观察者
-@property (nonatomic, weak) id observerObject;
+@property (nonatomic, strong) id observerObject;
 
 @end
