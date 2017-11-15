@@ -12,13 +12,8 @@ NSString * const kXYNoDataViewObserveKeyPath = @"frame";
 
 @implementation XYNoDataView
 
-/**
- 销毁时, 移除别人对自己的监听
- */
 - (void)dealloc {
-    if (self.observerObject) {
-        [self removeObserver:self.observerObject forKeyPath:kXYNoDataViewObserveKeyPath];
-    }
+    NSLog(@"占位视图正常销毁");
 }
 
 @end

@@ -33,6 +33,10 @@
     Method reloadData    = class_getInstanceMethod(self, @selector(reloadData));
     Method xy_reloadData = class_getInstanceMethod(self, @selector(xy_reloadData));
     method_exchangeImplementations(reloadData, xy_reloadData);
+    
+    Method dealloc       = class_getInstanceMethod(self, NSSelectorFromString(@"dealloc"));
+    Method xy_dealloc    = class_getInstanceMethod(self, @selector(xy_dealloc));
+    method_exchangeImplementations(dealloc, xy_dealloc);
 }
 
 /**
@@ -71,6 +75,7 @@
     
     //  不需要显示占位图
     if (havingData) {
+        [self freeNoDataViewIfNeeded];
         self.backgroundView = nil;
         return ;
     }
@@ -145,7 +150,6 @@
     
     //  实现跟随 TableView 滚动
     [view addObserver:self forKeyPath:kXYNoDataViewObserveKeyPath options:NSKeyValueObservingOptionNew context:nil];
-    view.observerObject = self;
     return view;
 }
 
@@ -188,6 +192,22 @@ static NSString * const kXYTableViewPropertyInitFinish = @"kXYTableViewPropertyI
 - (BOOL)isInitFinish {
     id obj = objc_getAssociatedObject(self, &kXYTableViewPropertyInitFinish);
     return [obj boolValue];
+}
+
+/**
+ 移除 KVO 监听
+ */
+- (void)freeNoDataViewIfNeeded {
+    
+    if ([self.backgroundView isKindOfClass:[XYNoDataView class]]) {
+        [self.backgroundView removeObserver:self forKeyPath:kXYNoDataViewObserveKeyPath context:nil];
+    }
+}
+
+- (void)xy_dealloc {
+    [self freeNoDataViewIfNeeded];
+    [self xy_dealloc];
+    NSLog(@"CollectionView + XY 视图正常销毁");
 }
 
 @end
