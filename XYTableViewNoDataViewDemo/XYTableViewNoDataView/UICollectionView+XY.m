@@ -29,14 +29,18 @@
  加载时, 交换方法
  */
 + (void)load {
-    
-    Method reloadData    = class_getInstanceMethod(self, @selector(reloadData));
-    Method xy_reloadData = class_getInstanceMethod(self, @selector(xy_reloadData));
-    method_exchangeImplementations(reloadData, xy_reloadData);
-    
-    Method dealloc       = class_getInstanceMethod(self, NSSelectorFromString(@"dealloc"));
-    Method xy_dealloc    = class_getInstanceMethod(self, @selector(xy_dealloc));
-    method_exchangeImplementations(dealloc, xy_dealloc);
+    //  只交换一次
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+            
+        Method reloadData    = class_getInstanceMethod(self, @selector(reloadData));
+        Method xy_reloadData = class_getInstanceMethod(self, @selector(xy_reloadData));
+        method_exchangeImplementations(reloadData, xy_reloadData);
+        
+        Method dealloc       = class_getInstanceMethod(self, NSSelectorFromString(@"dealloc"));
+        Method xy_dealloc    = class_getInstanceMethod(self, @selector(xy_dealloc));
+        method_exchangeImplementations(dealloc, xy_dealloc);
+    });
 }
 
 /**
