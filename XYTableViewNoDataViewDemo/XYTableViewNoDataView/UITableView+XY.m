@@ -182,21 +182,18 @@
 
 #pragma mark - 属性
 
-/// 加载完数据的标记属性名
-static NSString * const kXYTableViewPropertyInitFinish = @"kXYTableViewPropertyInitFinish";
-
 /**
  设置已经加载完成数据了
  */
 - (void)setIsInitFinish:(BOOL)finish {
-    objc_setAssociatedObject(self, &kXYTableViewPropertyInitFinish, @(finish), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(isInitFinish), @(finish), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 /**
  是否已经加载完成数据
  */
 - (BOOL)isInitFinish {
-    id obj = objc_getAssociatedObject(self, &kXYTableViewPropertyInitFinish);
+    id obj = objc_getAssociatedObject(self, _cmd);
     return [obj boolValue];
 }
 
